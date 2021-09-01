@@ -1,5 +1,5 @@
 {
-  "name": "node-exchangerate",
+  "name": "currencyexchanges",
   "version": "1.0.0",
   "description": "🌐 💸 An exchange rate API using data from Forex (via exchangerate.host)",
   "main": "src/index.js",

@@ -1,5 +1,5 @@
 # 💰 A simple exchange rate API for Node.js
-![GitHub package.json version](https://img.shields.io/github/package-json/v/Dannnington/node-exchangerate?style=for-the-badge) ![NPM package version](https://img.shields.io/npm/v/node-exchangerate?style=for-the-badge)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/Dannnington/node-exchangerate?style=for-the-badge) ![NPM package version](https://img.shields.io/npm/v/currencyexchanges?style=for-the-badge)
 
 node-exchangerate is a Node.js wrapper providing daily Forex currency exchange data, via [arzzen](https://github.com/arzzen/)'s [exchangerate.host](https://exchangerate.host).
 
