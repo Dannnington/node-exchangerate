@@ -17,7 +17,7 @@
         "skipLibCheck": true,
         "strict": false,
         "traceResolution": false,
-        "types": ["node", "jest"]
+        "types": ["node"]
     },
     "compileOnSave": false,
     "exclude": ["node_modules", "dist"],

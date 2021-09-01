@@ -19,7 +19,7 @@ const ExchangeRate = new NodeExr();
         '2019-01-05': { USD: 1.263, GBP: 1, CAD: 1.702184, EUR: 1.10877 }
       }
     */
-    // Response uses GBP rates, getting historical rates for USD , GBP, CAD, and EUR from 1 January to 5 January 2019 (1/1/2019-5/1/2019). Rates used are the rates from each respective date.
+    // Response uses GBP rates, getting historical rates for USD, GBP, CAD, and EUR from 1 January to 5 January 2019 (1/1/2019-5/1/2019). Rates used are the rates from each respective date.
 
     // Get current exchange rates for multiple set of currencies. Results are automatically converted into your primary currency.
     await ExchangeRate.getBulkExchangeRates(["EUR", "USD", "CAD", "GBP"]).then(console.log);
@@ -30,4 +30,30 @@ const ExchangeRate = new NodeExr();
     await ExchangeRate.getISO4217Codes().then(console.log);
     // => Response too long to display
 
+    // Get fluctuation data for a given set of currencies during a specific time period, with results automatically converted into your primary currency.
+    // Fluctuation data includes rates for the start and the end of the day, and a percentage representing the how much the rate has changed since the start of the day.
+    await ExchangeRate.getFluctuations(["EUR", "USD", "CAD", "GBP"], new Date("2019-01-01"), new Date("2019-01-05")).then(console.log);
+    /* => {
+        USD: { start_rate: 1, end_rate: 1, change: 0, change_pct: 0 },
+        GBP: {
+          start_rate: 0.785087,
+          end_rate: 0.791765,
+          change: -0.006678,
+          change_pct: -0.008506
+        },
+        CAD: {
+          start_rate: 1.361089,
+          end_rate: 1.347731,
+          change: 0.013358,
+          change_pct: 0.009814
+        },
+        EUR: {
+          start_rate: 0.870095,
+          end_rate: 0.877886,
+          change: -0.007791,
+          change_pct: -0.008954
+        }
+      }
+    */
+   // Response fetches fluctuation data for USD, GBP, CAD, and EUR from 1 January to 5 January 2019 (1/1/2019-5/1/2019).
 })();

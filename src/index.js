@@ -7,6 +7,11 @@ const uparser = require("url-parse");
 */
 
 /**
+ * An API response object
+ * @typedef {object} ExchangeRateResponse
+*/
+
+/**
  * Options that will be passed to exchangerate
  * @typedef {object} ExchangeRateOptions
  * @property {string} [url="https://api.exchangerate.host/latest"] The URL to a custom exchangerate.host instance
@@ -46,10 +51,10 @@ class ExchangeRate {
 
     /**
      * Get historical exchange rates between two time periods for a set of currencies. Exchange rates are to your primary currency. Data will cut off after 366 days.
-     * @param {ISO4217[]} currencies A list of currencies to get historical rates for
+     * @param {ISO4217[]} currencies An array of currencies to get historical rates for
      * @param {Date} startDate The start date of time to research historical rates (in JavaScript date format)
      * @param {Date} endDate The end date of time to research historical rates (in JavaScript date format)
-     * @return {Promise<object>} An object containing the historical exchange rates for the currencies requested
+     * @return {Promise<ExchangeRateResponse>} An object containing the historical exchange rates for the currencies requested
      */
     async getHistoricalRates(currencies, startDate, endDate) {
         if (!Array.isArray(currencies)) throw new TypeError("Expected type is array:ISO4217. Type is: " + typeof currencies);
@@ -66,9 +71,30 @@ class ExchangeRate {
     };
 
     /**
+     * Get fluctuations between two time periods for a set of currencies. Exchange rates are to your primary currency. Data will cut off after 366 days.
+     * @param {ISO4217[]} currencies An array of currencies to get fluctuation data for
+     * @param {Date} startDate The start date of the time period for fluctuation (in JavaScript date format)
+     * @param {Date} endDate The end date of the time period for fluctuation (in JavaScript date format)
+     * @return {Promise<ExchangeRateResponse>} An object containing the exchange rates for the currencies requested, containing data for the start and end of each day, and a percentage of change from the start to the end of each day.
+     */
+    async getFluctuations(currencies, startDate, endDate) {
+        if (!Array.isArray(currencies)) throw new TypeError("Expected type is array:ISO4217. Type is: " + typeof currencies);
+        if (typeof startDate !== "object") throw new TypeError("Expected type is object:Date. Type is: " + typeof startDate);
+        if (typeof endDate !== "object") throw new TypeError("Expected type is object:Date. Type is: " + typeof endDate);
+
+        const request = await fetch(`${this.url}/fluctuation?base=${this.primaryCurrency}&start_date=${startDate.toISOString().split("T")[0]}&end_date=${endDate.toISOString().split("T")[0]}&symbols=${currencies.join(",")}`)
+            .then(res => res.json())
+            .catch(() => { return "falseError" });
+
+        if (request === "falseError") throw new Error("An error occurred while fetching fluctuation data");
+        if (request.rates === null) throw new Error("An error occured while fetching fluctuation data: an invalid currency was entered, or no data is currently available");
+        return request.rates;
+    };
+
+    /**
      * Get current exchange rates for a set of currencies. Exchange rates are to your primary currency.
-     * @param {ISO4217[]} currencies A list of currencies to get historical rates for
-     * @return {Promise<object>} An object containing the current exchange rates for the currencies requested
+     * @param {ISO4217[]} currencies An array of currencies to get historical rates for
+     * @return {Promise<ExchangeRateResponse>} An object containing the current exchange rates for the currencies requested
      */
     async getBulkExchangeRates(currencies) {
         if (!Array.isArray(currencies)) throw new TypeError("Expected type is array:ISO4217. Type is: " + typeof currencies);
@@ -84,7 +110,7 @@ class ExchangeRate {
 
     /**
      * Get ISO 4217 currency codes that are supported by exchangerate.host and Forex.
-     * @return {Promise<object>} An object containing the ISO 4217 currency codes supported by exchangerate.host and Forex
+     * @return {Promise<ExchangeRateResponse>} An object containing the ISO 4217 currency codes supported by exchangerate.host and Forex
      */
     async getISO4217Codes() {
         const request = await fetch(`${this.url}/symbols`)
