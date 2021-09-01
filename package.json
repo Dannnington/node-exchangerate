@@ -1,0 +1,14 @@
+{
+  "name": "node-exchangerate",
+  "version": "1.0.0",
+  "description": "🌐 💸 An exchange rate API using data from Forex (via exchangerate.host)",
+  "main": "src/index.js",
+  "repository": "https://github.com/Dannnington/node-exchangerate.git",
+  "author": "Daniel Hyders <git@bean.codes>",
+  "license": "GPL-3.0-or-later",
+  "private": false,
+  "dependencies": {
+    "node-fetch": "2",
+    "url-parse": "^1.5.3"
+  }
+}
