@@ -1,5 +1,6 @@
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fetch = (...args) => import('cross-fetch').then(({default: fetch}) => fetch(...args));
 const uparser = require("url-parse");
+
 /**
  * The ISO-4217 code representing a currency
  * @typedef {string} ISO4217
@@ -96,3 +97,4 @@ class ExchangeRate {
 };
 
 module.exports = ExchangeRate;
+global.NodeExr = module.exports;
