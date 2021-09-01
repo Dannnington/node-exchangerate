@@ -3,6 +3,17 @@
 
 node-exchangerate is a Node.js wrapper providing daily Forex currency exchange data, via [arzzen](https://github.com/arzzen/)'s [exchangerate.host](https://exchangerate.host).
 
+# 💽 Usage
+
+```js
+    const NodeExr = require("currencyexchanges");
+    const ExchangeRate = new NodeExr({ primaryCurrency: "GBP" });
+    
+    (async function () {
+        await ExchangeRate.getExchangeRate("AUD", "GBP").then(console.log);
+    })();
+```
+
 # ✔️ Features
 
 - 💰 Daily exchange rates for both single and multiple currencies
