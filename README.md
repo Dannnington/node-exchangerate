@@ -47,7 +47,7 @@ const ExchangeRate = new NodeExr({ primaryCurrency: "GBP" });
 
 - 💰 Daily exchange rates for both single and multiple currencies
 - ⏰ Historical exchange rates between two time periods
-- ~~📈 Daily fluctuation data exchange rates (start and end rates, percentages for change, etc.)~~ **This is coming soon!**
+- 📈 Daily fluctuation data exchange rates (start and end rates, percentages for change, etc.)
 
 # 📚 Documentation
 
@@ -58,3 +58,13 @@ const ExchangeRate = new NodeExr({ primaryCurrency: "GBP" });
 - The [example file](src/examples/example.js) demonstrates each function with an explanation, an example usage of the function, and its' output (in the comments) of the file.
 
 # To-do
+
+- [x] Fluctuations
+
+- [x] Basic TypeScript configuration
+
+- [ ] Rewrite in TypeScript
+
+- [ ] Use ES instead of CommonJS for module source code
+
+- [ ] Add ES/CommonJS inoperability

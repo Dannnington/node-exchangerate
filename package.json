@@ -1,6 +1,6 @@
 {
   "name": "currencyexchanges",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "🌐 💸 An exchange rate API using data from Forex (via exchangerate.host)",
   "main": "src/index.js",
   "repository": "https://github.com/Dannnington/node-exchangerate.git",
