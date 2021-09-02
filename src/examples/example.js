@@ -1,9 +1,8 @@
-const NodeExr = require("../index");
+const NodeExr = require("../../dist/ts-transpiled/cjs/index.js");
 
 const ExchangeRate = new NodeExr();
 
 (async function () {
-
     // Get the exchange rate for a given currency pair, with the first argument being the currency to convert and the second argument being the currency to convert to as a base. By default, the second argument is your primary currency.
     await ExchangeRate.getExchangeRate("EUR").then(console.log); 
     // => 1.18114

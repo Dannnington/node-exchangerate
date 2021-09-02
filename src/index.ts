@@ -1,15 +1,18 @@
-const fetch = (...args) => import('cross-fetch').then(({default: fetch}) => fetch(...args));
-const uparser = require("url-parse");
+import fetch from "cross-fetch";
+import uparser from "url-parse";
+ 
 
 /**
  * The ISO-4217 code representing a currency
  * @typedef {string} ISO4217
 */
+type ISO4217 = string;
 
 /**
  * An API response object
  * @typedef {object} ExchangeRateResponse
 */
+type ExchangeRateResponse = object;
 
 /**
  * Options that will be passed to exchangerate
@@ -17,19 +20,28 @@ const uparser = require("url-parse");
  * @property {string} [url="https://api.exchangerate.host/latest"] The URL to a custom exchangerate.host instance
  * @property {ISO4217} [primaryCurrency=USD] The three-letter code for the currency of your choice, to be used as the primary currency for things like base
 */
+interface ExchangeRateOptions {
+    url?: string;
+    primaryCurrency?: string;
+};
 
 class ExchangeRate {
+
+    // Define ExchangeRateOptions types
+    url: string;
+    primaryCurrency: string;
+
     /**
      * The main exchangerate function class
      * @param {ExchangeRateOptions} [options] The options to be passed to exchangerate
      * @constructor
     */
-    constructor(options = { url: "https://api.exchangerate.host", primaryCurrency: "USD" }) {
+    constructor(options: ExchangeRateOptions = { url: "https://api.exchangerate.host", primaryCurrency: "USD" }) {
         this.url = uparser(options.url).protocol + "//" + uparser(options.url).host;
         this.primaryCurrency = options.primaryCurrency;
         
-        if (this.url === 0 || this.url === "//" || this.url === undefined || this.url === null) this.url = "https://api.exchangerate.host";
-        if (this.primaryCurrency === 0 || this.primaryCurrency === "//" || this.primaryCurrency === undefined || this.primaryCurrency === null) this.primaryCurrency = "USD"; 
+        if (this.url === "//" || this.url === undefined || this.url === null) this.url = "https://api.exchangerate.host";
+        if (this.primaryCurrency === "//" || this.primaryCurrency === undefined || this.primaryCurrency === null) this.primaryCurrency = "USD"; 
     };
 
     /**
@@ -38,7 +50,7 @@ class ExchangeRate {
      * @param {ISO4217} [to] The currency to convert the currency rate to
      * @returns {Promise<number>} The exchange rate between the two currencies
     */
-    async getExchangeRate(from="GBP", to=this.primaryCurrency) {
+    async getExchangeRate(from: ISO4217 = "GBP", to: ISO4217 = this.primaryCurrency): Promise<ExchangeRateResponse> {
         if (typeof from !== "string") throw new TypeError("Expected type is string:ISO4217. Type is: " + typeof from);
 
         const request = await fetch(`${this.url}/convert?from=${from}&to=${to}`)
@@ -56,7 +68,7 @@ class ExchangeRate {
      * @param {Date} endDate The end date of time to research historical rates (in JavaScript date format)
      * @return {Promise<ExchangeRateResponse>} An object containing the historical exchange rates for the currencies requested
      */
-    async getHistoricalRates(currencies, startDate, endDate) {
+    async getHistoricalRates(currencies: ISO4217[], startDate: Date, endDate: Date): Promise<ExchangeRateResponse> {
         if (!Array.isArray(currencies)) throw new TypeError("Expected type is array:ISO4217. Type is: " + typeof currencies);
         if (typeof startDate !== "object") throw new TypeError("Expected type is object:Date. Type is: " + typeof startDate);
         if (typeof endDate !== "object") throw new TypeError("Expected type is object:Date. Type is: " + typeof endDate);
@@ -77,7 +89,7 @@ class ExchangeRate {
      * @param {Date} endDate The end date of the time period for fluctuation (in JavaScript date format)
      * @return {Promise<ExchangeRateResponse>} An object containing the exchange rates for the currencies requested, containing data for the start and end of each day, and a percentage of change from the start to the end of each day.
      */
-    async getFluctuations(currencies, startDate, endDate) {
+    async getFluctuations(currencies: ISO4217[], startDate: Date, endDate: Date): Promise<ExchangeRateResponse> {
         if (!Array.isArray(currencies)) throw new TypeError("Expected type is array:ISO4217. Type is: " + typeof currencies);
         if (typeof startDate !== "object") throw new TypeError("Expected type is object:Date. Type is: " + typeof startDate);
         if (typeof endDate !== "object") throw new TypeError("Expected type is object:Date. Type is: " + typeof endDate);
@@ -96,7 +108,7 @@ class ExchangeRate {
      * @param {ISO4217[]} currencies An array of currencies to get historical rates for
      * @return {Promise<ExchangeRateResponse>} An object containing the current exchange rates for the currencies requested
      */
-    async getBulkExchangeRates(currencies) {
+    async getBulkExchangeRates(currencies: ISO4217[]): Promise<ExchangeRateResponse> {
         if (!Array.isArray(currencies)) throw new TypeError("Expected type is array:ISO4217. Type is: " + typeof currencies);
 
         const request = await fetch(`${this.url}/latest?base=${this.primaryCurrency}&symbols=${currencies.join(",")}`)
@@ -112,7 +124,7 @@ class ExchangeRate {
      * Get ISO 4217 currency codes that are supported by exchangerate.host and Forex.
      * @return {Promise<ExchangeRateResponse>} An object containing the ISO 4217 currency codes supported by exchangerate.host and Forex
      */
-    async getISO4217Codes() {
+    async getISO4217Codes(): Promise<ExchangeRateResponse> {
         const request = await fetch(`${this.url}/symbols`)
             .then(res => res.json())
             .catch(() => { return "falseError" });
@@ -122,5 +134,5 @@ class ExchangeRate {
     }
 };
 
-module.exports = ExchangeRate;
-global.NodeExr = module.exports;
+export default ExchangeRate;
+global.NodeExr = ExchangeRate; // Browser global declaration

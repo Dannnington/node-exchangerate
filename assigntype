@@ -1,0 +1,12 @@
+#!/bin/bash
+cat > dist/ts-transpiled/cjs/package.json <<!EOF
+{
+    "type": "commonjs"
+}
+!EOF
+
+cat > dist/ts-transpiled/esnext/package.json <<!EOF
+{
+    "type": "module"
+}
+!EOF
